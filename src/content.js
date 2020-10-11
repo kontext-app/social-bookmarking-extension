@@ -2,8 +2,9 @@ import 'libs/polyfills';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ThemeProvider, StyleSheetManager } from 'styled-components';
-import Box from 'components/Box';
-import Example from 'components/Example';
+
+import { highlightSelectedText } from 'features/highlight/dom-utils';
+import { useEventListener } from 'hooks/useEventListener';
 import defaultTheme from 'themes/default';
 
 const root = document.createElement('div');
@@ -17,20 +18,16 @@ shadow.appendChild(appContainer);
 
 document.body.appendChild(root);
 
-const App = () => {
+function App() {
+  useEventListener('mouseup', event => {
+    highlightSelectedText();
+  });
+
   return (
     <StyleSheetManager target={styleContainer}>
-      <ThemeProvider theme={defaultTheme}>
-        <Box
-          position="fixed"
-          bottom={3}
-          right={3}
-        >
-          <Example />
-        </Box>
-      </ThemeProvider>
+      <ThemeProvider theme={defaultTheme}>{/* TODO */}</ThemeProvider>
     </StyleSheetManager>
   );
-};
+}
 
 ReactDOM.render(<App />, appContainer);
