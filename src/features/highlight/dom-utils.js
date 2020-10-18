@@ -1,4 +1,6 @@
-export function highlightSelectedText(highlightColor = '#f9f2ae') {
+import defaultTheme from '../../themes/default';
+
+export function highlightSelectedText(highlightColor = defaultTheme.palette.textHighlight) {
   const selection = window.getSelection();
 
   if (selection.rangeCount) {
@@ -7,5 +9,17 @@ export function highlightSelectedText(highlightColor = '#f9f2ae') {
     spanWrapper.style.backgroundColor = highlightColor;
     spanWrapper.appendChild(range.extractContents());
     range.insertNode(spanWrapper);
+    return {
+      highlightedText: selection.toString(),
+      domRect: range.getBoundingClientRect(),
+    };
   }
+
+  return null;
+}
+
+export function findNodeByText(selector, text) {
+  return Array.from(document.querySelectorAll(selector)).find(element => {
+    return element.textContent.includes(text);
+  });
 }
