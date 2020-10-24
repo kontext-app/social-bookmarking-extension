@@ -18,7 +18,7 @@ shadow.appendChild(appContainer);
 
 document.body.appendChild(root);
 
-function App() {
+function ContentApp() {
   return (
     <StyleSheetManager target={styleContainer}>
       <ThemeProvider theme={defaultTheme}>
@@ -28,4 +28,4 @@ function App() {
   );
 }
 
-ReactDOM.render(<App />, appContainer);
+ReactDOM.render(<ContentApp />, appContainer);
