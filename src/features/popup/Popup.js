@@ -6,7 +6,7 @@ import { LogIn } from 'features/popup/LogIn';
 
 export function Popup(props) {
   return (
-    <Box height={384} width={384}>
+    <Box height={384} width={384} display="flex" padding={3}>
       <LogIn />
     </Box>
   );

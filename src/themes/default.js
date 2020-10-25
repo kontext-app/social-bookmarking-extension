@@ -9,6 +9,7 @@ export default {
     gray: '#eee',
     lightgray: '#fafafa',
     midgray: '#777',
+    white: '#fff',
   },
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   sizes: [0, 4, 8, 16, 32, 64, 128, 256, 512],
