@@ -5,7 +5,7 @@ const ActionToolTipBox = styled.div`
   position: fixed;
   left: ${props => `${props.x - 32}px`};
   top: ${props => `${props.y - 48}px`};
-  background-color: ${props => props.theme.palette.primary};
+  background-color: ${props => props.theme.colors.accent};
   flex-direction: row;
   display: flex;
   height: 32px;
@@ -15,8 +15,8 @@ const ActionToolTipArrow = styled.div`
   position: fixed;
   left: ${props => `${props.x - 16}px`};
   top: ${props => `${props.y - 16}px`};
-  border: 16px solid ${props => props.theme.palette.primary};
-  border-color: ${props => props.theme.palette.primary} transparent transparent transparent;
+  border: 16px solid ${props => props.theme.colors.accent};
+  border-color: ${props => props.theme.colors.accent} transparent transparent transparent;
 `;
 
 const ActionButton = styled.button`
@@ -24,7 +24,7 @@ const ActionButton = styled.button`
   width: 32px;
   align-items: center;
   justify-content: center;
-  background-color: ${props => props.theme.palette.primary};
+  background-color: ${props => props.theme.colors.accent};
   border: 0;
   &:hover {
     opacity: 0.5;
