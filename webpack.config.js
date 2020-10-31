@@ -3,10 +3,12 @@ const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 const ExtensionReloader = require('webpack-extension-reloader');
 const ManifestVersionSyncPlugin = require('webpack-manifest-version-sync-plugin');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   entry: {
     options: './src/options.js',
+    web3Modal: './src/web3-modal.js',
     popup: './src/popup.js',
     content: './src/content.js',
     background: './src/background.js',
@@ -41,10 +43,16 @@ module.exports = {
     ],
   },
   plugins: [
+    new Dotenv(),
     new HTMLPlugin({
       chunks: ['options'],
       filename: 'options.html',
       title: 'Options page title',
+    }),
+    new HTMLPlugin({
+      chunks: ['web3Modal'],
+      filename: 'web3-modal.html',
+      title: 'Web3 Modal',
     }),
     new HTMLPlugin({
       chunks: ['popup'],
