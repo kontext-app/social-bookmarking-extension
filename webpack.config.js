@@ -42,7 +42,9 @@ module.exports = {
     ],
   },
   plugins: [
-    new Dotenv(),
+    new Dotenv({
+      path: './.env.local',
+    }),
     new HTMLPlugin({
       chunks: ['options'],
       filename: 'options.html',

@@ -1,9 +1,9 @@
 {
-  "version": "1.0.1",
-  "name": "react-browser-extension-boilerplate",
+  "version": "0.1.0",
+  "name": "social-bookmarking-extension",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ElForastero/react-browser-extension-boilerplate"
+    "url": "https://github.com/kontext-app/social-bookmarking-extension"
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production yarn webpack -c webpack.config.js --mode production",

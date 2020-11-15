@@ -6,4 +6,4 @@ build.pem
 ext.nex
 ext.pem
 .pinning.store
-.env
+.env.local
