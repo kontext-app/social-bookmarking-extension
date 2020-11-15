@@ -1,30 +1,25 @@
-import React, { useState } from 'react';
-
-import { Box } from 'components/Box';
+import React, { useState, useEffect } from 'react';
 
 import { LogIn } from 'features/popup/LogIn';
-import { OPEN_WEB3_MODAL } from 'features/web3-modal/messages';
+import { AddBookmark } from 'features/popup/AddBookmark';
 
-import { sendMessageToActiveTab } from 'features/popup/utils';
+import { LoadingStatus } from 'constants/enums';
 
-export function Popup(props) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+import { getLastAuthenticatedDID } from 'apis/storage';
 
-  const handleClickLogIn = async () => {
-    try {
-      browser.tabs.create({
-        // TODO: Point to login url of web app
-        url: 'web3-modal.html',
-      });
-      window.close();
-    } catch (error) {
-      console.error(error);
-    }
-  };
+export function Popup() {
+  const [lastAuthenticatedDID, setLastAuthenticatedDID] = useState(LoadingStatus.IDLE);
 
-  return (
-    <Box display="flex">
-      <LogIn onClickLogIn={handleClickLogIn} />
-    </Box>
-  );
+  useEffect(() => {
+    getLastAuthenticatedDID().then(did => {
+      console.log({ lastAuthenticatedDID: did });
+      setLastAuthenticatedDID(did);
+    });
+  }, []);
+
+  if (typeof lastAuthenticatedDID === 'string' && lastAuthenticatedDID !== '') {
+    return <AddBookmark />;
+  }
+
+  return <LogIn />;
 }
