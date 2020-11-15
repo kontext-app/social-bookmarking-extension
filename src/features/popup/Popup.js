@@ -17,7 +17,7 @@ export function Popup() {
     });
   }, []);
 
-  if (typeof lastAuthenticatedDID === 'string' && lastAuthenticatedDID !== '') {
+  if (typeof lastAuthenticatedDID === 'string' && lastAuthenticatedDID !== LoadingStatus.IDLE) {
     return <AddBookmark lastAuthenticatedDID={lastAuthenticatedDID} />;
   }
 
