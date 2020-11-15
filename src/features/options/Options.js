@@ -5,7 +5,7 @@ import { Box } from 'components/Box';
 import { Text } from 'components/Text';
 import { Button } from 'components/Button';
 
-import { getDID } from 'apis/ceramic';
+import { getDID, hasBookmarksIndex, setDefaultBookmarksIndex } from 'apis/ceramic';
 import { LoadingStatus } from 'constants/enums';
 import { useAuthWithEthereum } from 'hooks/useAuthWithEthereum';
 import { storeLastAuthenticatedDID } from 'apis/storage';
@@ -19,6 +19,12 @@ export function Options() {
     try {
       setAuthStatus(LoadingStatus.PENDING);
       await authWithEthereum();
+      const isBookmarksIndexInitialized = await hasBookmarksIndex();
+
+      if (!isBookmarksIndexInitialized) {
+        await setDefaultBookmarksIndex();
+      }
+
       setAuthStatus(LoadingStatus.SUCCESS);
       const lastAuthenticatedDID = getDID();
       setDID(lastAuthenticatedDID);
