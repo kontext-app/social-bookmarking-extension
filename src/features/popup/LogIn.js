@@ -5,6 +5,13 @@ import { Text } from 'components/Text';
 import { Button } from 'components/Button';
 
 export function LogIn(props) {
+  const handleClickLogIn = () => {
+    browser.tabs.create({
+      url: 'options.html',
+    });
+    window.close();
+  };
+
   return (
     <Box
       height={384}
@@ -17,7 +24,7 @@ export function LogIn(props) {
     >
       <Text fontSize={3}>Welcome to Kontext</Text>
       <Text>Log in with your Ethereum address to get started.</Text>
-      <Button onClick={props.onClickLogIn}>Log In</Button>
+      <Button onClick={handleClickLogIn}>Log In</Button>
     </Box>
   );
 }

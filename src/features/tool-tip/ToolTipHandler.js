@@ -15,7 +15,6 @@ export function ToolTipHandler(props) {
   const handleClickBookmark = useCallback(() => {
     const selectedText = getSelectedText();
     setShowToolTip(false);
-    console.log({ selectedText });
   }, []);
 
   return (
