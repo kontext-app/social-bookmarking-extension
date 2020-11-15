@@ -1,3 +1,5 @@
+import browser from 'webextension-polyfill';
+
 export async function storeLastAuthenticatedDID(did) {
   return browser.storage.local.set({ lastAuthenticatedDID: did });
 }
