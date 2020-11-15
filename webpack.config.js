@@ -8,7 +8,6 @@ const Dotenv = require('dotenv-webpack');
 module.exports = {
   entry: {
     options: './src/options.js',
-    web3Modal: './src/web3-modal.js',
     popup: './src/popup.js',
     content: './src/content.js',
     background: './src/background.js',
@@ -47,12 +46,7 @@ module.exports = {
     new HTMLPlugin({
       chunks: ['options'],
       filename: 'options.html',
-      title: 'Options page title',
-    }),
-    new HTMLPlugin({
-      chunks: ['web3Modal'],
-      filename: 'web3-modal.html',
-      title: 'Web3 Modal',
+      title: 'Welcome to Kontext',
     }),
     new HTMLPlugin({
       chunks: ['popup'],
