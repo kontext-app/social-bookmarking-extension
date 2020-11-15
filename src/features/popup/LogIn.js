@@ -4,9 +4,11 @@ import { Box } from 'components/Box';
 import { Text } from 'components/Text';
 import { Button } from 'components/Button';
 
+import { createTab } from 'apis/tabs';
+
 export function LogIn(props) {
   const handleClickLogIn = () => {
-    browser.tabs.create({
+    createTab({
       url: 'options.html',
     });
     window.close();

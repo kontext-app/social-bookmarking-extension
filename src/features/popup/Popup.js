@@ -18,7 +18,7 @@ export function Popup() {
   }, []);
 
   if (typeof lastAuthenticatedDID === 'string' && lastAuthenticatedDID !== '') {
-    return <AddBookmark />;
+    return <AddBookmark lastAuthenticatedDID={lastAuthenticatedDID} />;
   }
 
   return <LogIn />;
