@@ -5,11 +5,11 @@ export const Button = styled.button(
   {
     backgroundColor: props => props.theme.colors.background,
     color: props => props.theme.colors[props.type],
-    border: props => `2px solid ${props.theme.colors[props.type]}`,
+    border: props => `1px solid ${props.theme.colors[props.type]}`,
     borderRadius: 3,
     padding: '8px 16px',
     fontFamily: props => props.theme.fonts.body,
-    fontSize: '16px',
+    fontSize: '1',
     '&:hover': {
       opacity: 0.5,
       cursor: 'pointer',

@@ -72,7 +72,7 @@ export function AddBookmark(props) {
 
   return (
     <Box
-      height={384}
+      height={260}
       width={384}
       padding={3}
       display="flex"
@@ -84,6 +84,7 @@ export function AddBookmark(props) {
         isLoading={isProfileLoading}
         username={profile.username}
         did={props.lastAuthenticatedDID}
+        //boxShadow="5px 10px #888888"
       />
       <BookmarkForm
         initialBookmarkForm={initialBookmarkFrom}
@@ -99,13 +100,15 @@ function UpperBox(props) {
   const { isLoading, did, username, imgSrc } = props;
   return (
     <Box display="flex" width="100%" flexDirection="row" overflowX="hidden">
-      {isLoading ? (
-        <Circle color="lightGrey" marginRight={3} />
-      ) : (
-        // TODO: Use img src
-        <CircleIcon backgroundColor="lightGrey" marginRight={3} icon={<User color="white" />} />
-      )}
-      <Box width="90%">
+      <Box width="20%">
+        {isLoading ? (
+          <Circle color="lightGrey" marginRight={3} />
+        ) : (
+          // TODO: Use img src
+          <CircleIcon backgroundColor="lightGrey" marginRight={3} icon={<User color="white" />} />
+        )}
+      </Box>
+      <Box width="80%">
         {isLoading ? (
           <>
             <Box height={14} backgroundColor="lightGrey" marginBottom={1} />
@@ -163,17 +166,17 @@ function BookmarkForm(props) {
         alignItems="center"
         justifyContent="space-evenly"
       >
-        <Box display="flex" flexDirection="column" width="100%">
-          <Text>Title</Text>
-          <Input value={bookmarkForm.title} onChange={e => handleChange('title', e)} />
+        <Box display="flex" flexDirection="row" width="100%">
+          <Text marginRight={2} textAlign="right" width="20%" color="grey">Title</Text>
+          <Input width="80%" value={bookmarkForm.title} onChange={e => handleChange('title', e)} />
         </Box>
-        <Box display="flex" flexDirection="column" width="100%">
-          <Text>Description</Text>
-          <Input value={bookmarkForm.description} onChange={e => handleChange('description', e)} />
+        <Box display="flex" flexDirection="row" width="100%">
+          <Text marginRight={2} textAlign="right" width="20%" color="grey">Description</Text>
+          <Input width="80%" value={bookmarkForm.description} onChange={e => handleChange('description', e)} />
         </Box>
-        <Box display="flex" flexDirection="column" width="100%">
-          <Text>URL</Text>
-          <Input value={bookmarkForm.url} disabled />
+        <Box display="flex" flexDirection="row" width="100%">
+          <Text marginRight={2} textAlign="right" width="20%" color="grey">URL</Text>
+          <Input width="80%" value={bookmarkForm.url} disabled />
         </Box>
       </Box>
       <Button onClick={handleClickSave} disabled={isLoading || isSaving}>

@@ -1,10 +1,12 @@
 import styled from 'styled-components';
-import { typography, color } from 'styled-system';
+import { typography, color, space, layout } from 'styled-system';
 
 export const Text = styled.span(
   {
     fontFamily: props => props.theme.fonts.body,
   },
   typography,
-  color
+  color,
+  space,
+  layout
 );
