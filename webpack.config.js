@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const HTMLPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
@@ -26,14 +27,16 @@ module.exports = {
       'react-dom': 'preact/compat',
     },
     fallback: {
-      crypto: false,
-      https: false,
-      url: false,
-      os: false,
-      http: false,
-      stream: false,
-      assert: false,
-      path: false,
+      assert: 'assert',
+      buffer: 'buffer',
+      crypto: 'crypto-browserify',
+      https: 'https-browserify',
+      url: 'url',
+      os: 'os-browserify/browser.js',
+      http: 'stream-http',
+      stream: 'stream-browserify',
+      path: 'path-browserify',
+      process: 'process/browser.js',
       fs: false,
     },
   },
@@ -56,6 +59,10 @@ module.exports = {
     ],
   },
   plugins: [
+    new webpack.ProvidePlugin({
+      process: 'process/browser.js',
+      Buffer: ['buffer', 'Buffer'],
+    }),
     new Dotenv({
       path: './.env.local',
     }),

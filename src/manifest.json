@@ -27,6 +27,6 @@
     "128": "assets/img/icon-128x128.png"
   },
   "permissions": ["storage", "tabs"],
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'; connect-src ws://localhost:*/ wss://bridge.walletconnect.org/ https://ceramic.3boxlabs.com/;",
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'; connect-src ws://localhost:*/ wss://bridge.walletconnect.org/ https://ceramic.kontext.app/ https://3id.kontext.app/;",
   "web_accessible_resources": ["assets/img/*"]
 }
