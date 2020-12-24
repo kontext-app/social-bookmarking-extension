@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { useEventListener } from 'hooks/useEventListener';
 
-import { getSelectedText, getDOMRectOfSelection } from 'features/tool-tip/dom-utils';
+import {
+  getSelectedText,
+  getDOMRectOfSelection,
+} from 'features/tool-tip/dom-utils';
 
 export function useToolTipPosition() {
   const [showToolTip, setShowToolTip] = useState(false);
@@ -20,11 +23,14 @@ export function useToolTipPosition() {
 
     if (selectedText) {
       const domRectOfSelection = getDOMRectOfSelection();
-      setToolTipPosition({
-        x: domRectOfSelection.x + domRectOfSelection.width / 2,
-        y: domRectOfSelection.y,
-      });
-      setShowToolTip(true);
+
+      if (domRectOfSelection) {
+        setToolTipPosition({
+          x: domRectOfSelection.x + domRectOfSelection.width / 2,
+          y: domRectOfSelection.y,
+        });
+        setShowToolTip(true);
+      }
     }
   });
 

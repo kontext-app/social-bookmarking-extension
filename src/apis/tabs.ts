@@ -1,6 +1,7 @@
+// @ts-ignore
 import browser from 'webextension-polyfill';
 
-export function createTab(options) {
+export function createTab(options: any) {
   browser.tabs.create(options);
 }
 

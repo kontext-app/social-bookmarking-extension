@@ -14,7 +14,7 @@ const web3Modal = new Web3Modal({
         description: 'Connect with MetaMask',
       },
       package: createMetaMaskProvider,
-      connector: async createMetaMaskProvider => {
+      connector: async (createMetaMaskProvider) => {
         const provider = createMetaMaskProvider();
         await provider.enable();
         return provider;

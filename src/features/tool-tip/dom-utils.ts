@@ -1,9 +1,9 @@
-import defaultTheme from '../../themes/default';
+import defaultTheme from 'themes/default';
 
 export function getSelection() {
   const selection = window.getSelection();
 
-  if (!selection.rangeCount) {
+  if (!selection?.rangeCount) {
     return;
   }
 
@@ -20,10 +20,12 @@ export function getSelectedText() {
   return selection.toString();
 }
 
-export function highlightSelectedText(highlightColor = defaultTheme.palette.textHighlight) {
+export function highlightSelectedText(
+  highlightColor = defaultTheme.colors.highlight
+) {
   const selection = getSelection();
 
-  if (!selection.rangeCount) {
+  if (!selection?.rangeCount) {
     return;
   }
 
@@ -47,8 +49,8 @@ export function getDOMRectOfSelection() {
   return range.getBoundingClientRect();
 }
 
-export function findNodeByText(selector, text) {
-  return Array.from(document.querySelectorAll(selector)).find(element => {
+export function findNodeByText(selector: any, text: string) {
+  return Array.from(document.querySelectorAll(selector)).find((element) => {
     return element.textContent.includes(text);
   });
 }

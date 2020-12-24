@@ -4,8 +4,8 @@
 
 ### Prerequisites
 
-- node
-- yarn
+- node@14.x
+- yarn@^1.22.10
 
 ### Install
 

@@ -1,9 +1,13 @@
 import React from 'react';
 
-import { Circle } from 'components/Circle';
+import { Circle, Props as CircleProps } from 'components/Circle';
 import { Box } from 'components/Box';
 
-export function CircleIcon(props) {
+export type Props = CircleProps & {
+  icon: any;
+};
+
+export function CircleIcon(props: Props): JSX.Element {
   const { icon, ...restProps } = props;
   return (
     <Circle {...restProps}>

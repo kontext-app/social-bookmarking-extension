@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { User } from 'react-feather';
+import {
+  BasicProfileDocContent,
+  BookmarkDocContent,
+  enums,
+} from 'kontext-common';
 
 import { Box } from 'components/Box';
 import { Text } from 'components/Text';
@@ -8,7 +13,6 @@ import { Circle } from 'components/Circle';
 import { CircleIcon } from 'components/CircleIcon';
 import { Input } from 'components/Input';
 
-import { LoadingStatus } from 'constants/enums';
 import { useAuthWithEthereum } from 'hooks/useAuthWithEthereum';
 import {
   getProfileByDID,
@@ -19,56 +23,82 @@ import {
 import { getActiveTab } from 'apis/tabs';
 import { enrichPartialBookmark } from 'features/popup/utils';
 
-export function AddBookmark(props) {
-  const [profileLoadingStatus, setProfileLoadingStatus] = useState(LoadingStatus.IDLE);
-  const [bookmarkLoadingStatus, setBookmarkLoadingStatus] = useState(LoadingStatus.IDLE);
+import type { LoadingStatus } from 'kontext-common';
+
+type Props = {
+  lastAuthenticatedDID?: string;
+};
+
+export function AddBookmark(props: Props): JSX.Element {
+  const [
+    profileLoadingStatus,
+    setProfileLoadingStatus,
+  ] = useState<LoadingStatus>(enums.LoadingStatus.IDLE);
+  const [
+    bookmarkLoadingStatus,
+    setBookmarkLoadingStatus,
+  ] = useState<LoadingStatus>(enums.LoadingStatus.IDLE);
   const authWithEthereum = useAuthWithEthereum();
-  const [profile, setProfile] = useState({});
+  const [profile, setProfile] = useState<Partial<BasicProfileDocContent>>({});
   const [initialBookmarkFrom, setInitialBookmarkForm] = useState({});
 
   useEffect(() => {
-    setProfileLoadingStatus(LoadingStatus.PENDING);
+    setProfileLoadingStatus(enums.LoadingStatus.PENDING);
     authWithEthereum()
       .then(() => getProfileByDID())
-      .then(basicProfile => setProfile(basicProfile || {}))
-      .then(() => setProfileLoadingStatus(LoadingStatus.SUCCESS))
-      .catch(error => {
-        setProfileLoadingStatus(LoadingStatus.FAIL);
+      .then((basicProfile) => setProfile(basicProfile || {}))
+      .then(() => setProfileLoadingStatus(enums.LoadingStatus.FULFILLED))
+      .catch((error) => {
+        setProfileLoadingStatus(enums.LoadingStatus.REJECTED);
         console.error(error);
       });
   }, []);
 
   useEffect(() => {
-    getActiveTab().then(activeTab => {
+    getActiveTab().then((activeTab) => {
       const { title, url } = activeTab;
       setInitialBookmarkForm({ title, url });
     });
   }, []);
 
-  const handleClickSave = async bookmark => {
+  const handleClickSave = async (bookmark: Partial<BookmarkDocContent>) => {
     try {
-      setBookmarkLoadingStatus(LoadingStatus.PENDING);
+      setBookmarkLoadingStatus(enums.LoadingStatus.PENDING);
       const enrichedBookmark = enrichPartialBookmark({
         ...bookmark,
         author: props.lastAuthenticatedDID,
       });
+      const bookmarksIndexDocContent = await getBookmarksIndexDocContent();
+
+      if (!bookmarksIndexDocContent) {
+        throw new Error('BookmarksIndex doc content is null!');
+      }
+
       // TODO: Allow to change collection
-      const unsortedIndexKeyDocID = (await getBookmarksIndexDocContent())['unsorted'];
+      const unsortedIndexKeyDocID = bookmarksIndexDocContent['unsorted'];
       const addedBookmarkDocID = await createBookmarkDoc(enrichedBookmark);
-      const { id } = await addBookmarkDocToBookmarksDoc(addedBookmarkDocID, unsortedIndexKeyDocID);
-      console.log('Successfully added document with docID: ', id.toUrl('base36'));
-      setBookmarkLoadingStatus(LoadingStatus.SUCCESS);
+      const { id } = await addBookmarkDocToBookmarksDoc(
+        addedBookmarkDocID,
+        unsortedIndexKeyDocID
+      );
+      console.log('Successfully added document with docID: ', id.toUrl());
+      setBookmarkLoadingStatus(enums.LoadingStatus.FULFILLED);
       setInitialBookmarkForm({});
     } catch (error) {
       console.log({ error });
-      setBookmarkLoadingStatus(LoadingStatus.FAIL);
+      setBookmarkLoadingStatus(enums.LoadingStatus.REJECTED);
     }
   };
 
-  const isProfileLoading = [LoadingStatus.PENDING, LoadingStatus.IDLE].includes(
-    profileLoadingStatus
+  const isProfileLoading = [
+    enums.LoadingStatus.PENDING,
+    enums.LoadingStatus.IDLE,
+    // @ts-ignore
+  ].includes(profileLoadingStatus);
+  const isBookmarkLoading = [enums.LoadingStatus.PENDING].includes(
+    // @ts-ignore
+    bookmarkLoadingStatus
   );
-  const isBookmarkLoading = [LoadingStatus.PENDING].includes(bookmarkLoadingStatus);
 
   return (
     <Box
@@ -82,9 +112,8 @@ export function AddBookmark(props) {
     >
       <UpperBox
         isLoading={isProfileLoading}
-        username={profile.username}
+        username={profile.name}
         did={props.lastAuthenticatedDID}
-        //boxShadow="5px 10px #888888"
       />
       <BookmarkForm
         initialBookmarkForm={initialBookmarkFrom}
@@ -96,8 +125,13 @@ export function AddBookmark(props) {
   );
 }
 
-function UpperBox(props) {
-  const { isLoading, did, username, imgSrc } = props;
+function UpperBox(props: {
+  isLoading: boolean;
+  did?: string;
+  username?: string;
+  imgSrc?: string;
+}) {
+  const { isLoading, did, username } = props;
   return (
     <Box display="flex" width="100%" flexDirection="row" overflowX="hidden">
       <Box width="20%">
@@ -105,7 +139,11 @@ function UpperBox(props) {
           <Circle color="lightGrey" marginRight={3} />
         ) : (
           // TODO: Use img src
-          <CircleIcon backgroundColor="lightGrey" marginRight={3} icon={<User color="white" />} />
+          <CircleIcon
+            backgroundColor="lightGrey"
+            marginRight={3}
+            icon={<User color="white" />}
+          />
         )}
       </Box>
       <Box width="80%">
@@ -115,7 +153,11 @@ function UpperBox(props) {
             <Box height={14} backgroundColor="lightGrey" marginTop={1} />
           </>
         ) : (
-          <Box display="flex" flexDirection="column" justifyContent="space-between">
+          <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent="space-between"
+          >
             <Text>{username || 'Username'}</Text>
             <Text color="grey" fontSize={1}>
               {did}
@@ -127,9 +169,16 @@ function UpperBox(props) {
   );
 }
 
-function BookmarkForm(props) {
+function BookmarkForm(props: {
+  isLoading: boolean;
+  isSaving: boolean;
+  initialBookmarkForm: Partial<BookmarkDocContent>;
+  onClickSave: (bookmarkForm: Partial<BookmarkDocContent>) => void;
+}) {
   const { isLoading, isSaving, initialBookmarkForm } = props;
-  const [bookmarkForm, setBookmarkForm] = useState({});
+  const [bookmarkForm, setBookmarkForm] = useState<Partial<BookmarkDocContent>>(
+    {}
+  );
 
   useEffect(() => {
     setBookmarkForm({
@@ -137,8 +186,11 @@ function BookmarkForm(props) {
     });
   }, [initialBookmarkForm]);
 
-  const handleChange = (key, event) => {
-    setBookmarkForm(prevBookmarkForm => ({
+  const handleChange = (
+    key: keyof BookmarkDocContent,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setBookmarkForm((prevBookmarkForm) => ({
       ...prevBookmarkForm,
       [key]: event.target.value,
     }));
@@ -167,15 +219,29 @@ function BookmarkForm(props) {
         justifyContent="space-evenly"
       >
         <Box display="flex" flexDirection="row" width="100%">
-          <Text marginRight={2} textAlign="right" width="20%" color="grey">Title</Text>
-          <Input width="80%" value={bookmarkForm.title} onChange={e => handleChange('title', e)} />
+          <Text marginRight={2} textAlign="right" width="20%" color="grey">
+            Title
+          </Text>
+          <Input
+            width="80%"
+            value={bookmarkForm.title}
+            onChange={(e) => handleChange('title', e)}
+          />
         </Box>
         <Box display="flex" flexDirection="row" width="100%">
-          <Text marginRight={2} textAlign="right" width="20%" color="grey">Description</Text>
-          <Input width="80%" value={bookmarkForm.description} onChange={e => handleChange('description', e)} />
+          <Text marginRight={2} textAlign="right" width="20%" color="grey">
+            Description
+          </Text>
+          <Input
+            width="80%"
+            value={bookmarkForm.description}
+            onChange={(e) => handleChange('description', e)}
+          />
         </Box>
         <Box display="flex" flexDirection="row" width="100%">
-          <Text marginRight={2} textAlign="right" width="20%" color="grey">URL</Text>
+          <Text marginRight={2} textAlign="right" width="20%" color="grey">
+            URL
+          </Text>
           <Input width="80%" value={bookmarkForm.url} disabled />
         </Box>
       </Box>

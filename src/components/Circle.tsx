@@ -1,8 +1,13 @@
 import React from 'react';
 
-import { Box } from 'components/Box';
+import { Box, Props as BoxProps } from 'components/Box';
 
-export function Circle(props) {
+export type Props = {
+  size?: number;
+  color?: string;
+} & BoxProps;
+
+export function Circle(props: Props): JSX.Element {
   return (
     <Box
       height={props.size || 32}

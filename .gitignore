@@ -7,3 +7,4 @@ ext.nex
 ext.pem
 .pinning.store
 .env.local
+yarn-error.log

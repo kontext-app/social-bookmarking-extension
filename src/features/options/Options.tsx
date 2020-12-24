@@ -1,23 +1,31 @@
 import 'libs/polyfills';
 import React, { useState } from 'react';
+import { enums } from 'kontext-common';
 
 import { Box } from 'components/Box';
 import { Text } from 'components/Text';
 import { Button } from 'components/Button';
 
-import { getDID, hasBookmarksIndex, setDefaultBookmarksIndex } from 'apis/ceramic';
-import { LoadingStatus } from 'constants/enums';
+import {
+  getDID,
+  hasBookmarksIndex,
+  setDefaultBookmarksIndex,
+} from 'apis/ceramic';
 import { useAuthWithEthereum } from 'hooks/useAuthWithEthereum';
 import { storeLastAuthenticatedDID } from 'apis/storage';
 
-export function Options() {
-  const [authStatus, setAuthStatus] = useState(LoadingStatus.IDLE);
+import type { LoadingStatus } from 'kontext-common';
+
+export function Options(): JSX.Element {
+  const [authStatus, setAuthStatus] = useState<LoadingStatus>(
+    enums.LoadingStatus.IDLE
+  );
   const [did, setDID] = useState('');
   const authWithEthereum = useAuthWithEthereum();
 
   const handleClickContinue = async () => {
     try {
-      setAuthStatus(LoadingStatus.PENDING);
+      setAuthStatus(enums.LoadingStatus.PENDING);
       await authWithEthereum();
       const isBookmarksIndexInitialized = await hasBookmarksIndex();
 
@@ -25,17 +33,17 @@ export function Options() {
         await setDefaultBookmarksIndex();
       }
 
-      setAuthStatus(LoadingStatus.SUCCESS);
+      setAuthStatus(enums.LoadingStatus.FULFILLED);
       const lastAuthenticatedDID = getDID();
       setDID(lastAuthenticatedDID);
       storeLastAuthenticatedDID(lastAuthenticatedDID);
     } catch (error) {
-      setAuthStatus(LoadingStatus.FAIL);
+      setAuthStatus(enums.LoadingStatus.REJECTED);
       console.error(error);
     }
   };
 
-  const isPending = authStatus === LoadingStatus.PENDING;
+  const isPending = authStatus === enums.LoadingStatus.PENDING;
 
   return (
     <Box
@@ -54,7 +62,9 @@ export function Options() {
         </>
       ) : (
         <>
-          <Text>To log in via an Ethereum account, click the button below.</Text>
+          <Text>
+            To log in via an Ethereum account, click the button below.
+          </Text>
           <Button onClick={handleClickContinue} disabled={isPending}>
             {isPending ? 'Authenticating...' : 'Continue'}
           </Button>

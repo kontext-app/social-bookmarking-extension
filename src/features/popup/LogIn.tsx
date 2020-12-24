@@ -6,7 +6,7 @@ import { Button } from 'components/Button';
 
 import { createTab } from 'apis/tabs';
 
-export function LogIn(props) {
+export function LogIn(): JSX.Element {
   const handleClickLogIn = () => {
     createTab({
       url: 'options.html',

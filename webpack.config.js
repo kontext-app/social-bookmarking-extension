@@ -4,36 +4,50 @@ const path = require('path');
 const ExtensionReloader = require('webpack-extension-reloader');
 const ManifestVersionSyncPlugin = require('webpack-manifest-version-sync-plugin');
 const Dotenv = require('dotenv-webpack');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+  .BundleAnalyzerPlugin;
 
 module.exports = {
   entry: {
-    options: './src/options.js',
-    popup: './src/popup.js',
-    content: './src/content.js',
-    background: './src/background.js',
+    options: './src/options.tsx',
+    popup: './src/popup.tsx',
+    content: './src/content.tsx',
+    background: './src/background.ts',
   },
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'build'),
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.css'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.css'],
     modules: [path.resolve(__dirname, 'src'), 'node_modules'],
     alias: {
       react: 'preact/compat',
       'react-dom': 'preact/compat',
     },
+    fallback: {
+      crypto: false,
+      https: false,
+      url: false,
+      os: false,
+      http: false,
+      stream: false,
+      assert: false,
+      path: false,
+      fs: false,
+    },
   },
   module: {
     rules: [
       {
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        use: [{ loader: 'ts-loader' }],
+      },
+      {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        use: [
-          {
-            loader: 'babel-loader',
-          },
-        ],
+        use: [{ loader: 'babel-loader' }],
       },
       {
         test: /\.svg$/,
@@ -63,6 +77,7 @@ module.exports = {
       manifest: path.resolve(__dirname, './src/manifest.json'),
     }),
     new ManifestVersionSyncPlugin(),
+    new BundleAnalyzerPlugin(),
   ],
   optimization: {
     minimize: true,
