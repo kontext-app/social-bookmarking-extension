@@ -56,6 +56,12 @@ module.exports = {
         test: /\.svg$/,
         use: ['@svgr/webpack'],
       },
+      {
+        test: /\.(jpg|png)$/,
+        use: {
+          loader: 'url-loader',
+        },
+      },
     ],
   },
   plugins: [
@@ -84,7 +90,7 @@ module.exports = {
       manifest: path.resolve(__dirname, './src/manifest.json'),
     }),
     new ManifestVersionSyncPlugin(),
-    new BundleAnalyzerPlugin(),
+    // new BundleAnalyzerPlugin(),
   ],
   optimization: {
     minimize: true,

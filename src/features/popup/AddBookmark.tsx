@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { User } from 'react-feather';
 import {
   BasicProfileDocContent,
   BookmarkDocContent,
@@ -9,8 +8,6 @@ import {
 import { Box } from 'components/Box';
 import { Text } from 'components/Text';
 import { Button } from 'components/Button';
-import { Circle } from 'components/Circle';
-import { CircleIcon } from 'components/CircleIcon';
 import { Input } from 'components/Input';
 
 import { useAuthWithEthereum } from 'hooks/useAuthWithEthereum';
@@ -22,6 +19,8 @@ import {
 } from 'apis/ceramic';
 import { getActiveTab } from 'apis/tabs';
 import { enrichPartialBookmark } from 'features/popup/utils';
+// @ts-ignore
+import Logo from '../../assets/img/icon-48x48.png';
 
 import type { LoadingStatus } from 'kontext-common';
 
@@ -134,19 +133,10 @@ function UpperBox(props: {
   const { isLoading, did, username } = props;
   return (
     <Box display="flex" width="100%" flexDirection="row" overflowX="hidden">
-      <Box width="20%">
-        {isLoading ? (
-          <Circle color="lightGrey" marginRight={3} />
-        ) : (
-          // TODO: Use img src
-          <CircleIcon
-            backgroundColor="lightGrey"
-            marginRight={3}
-            icon={<User color="white" />}
-          />
-        )}
+      <Box width="15%" alignSelf="center">
+        <img src={Logo} />
       </Box>
-      <Box width="80%">
+      <Box width="85%" alignSelf="center">
         {isLoading ? (
           <>
             <Box height={14} backgroundColor="lightGrey" marginBottom={1} />
@@ -158,8 +148,25 @@ function UpperBox(props: {
             flexDirection="column"
             justifyContent="space-between"
           >
-            <Text>{username || 'Username'}</Text>
-            <Text color="grey" fontSize={1}>
+            <Box
+              display="flex"
+              flexDirection="row"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Text fontSize={0}>{username || 'Username'}</Text>
+              <Button
+                paddingBottom="4px"
+                paddingTop="0px"
+                paddingRight="0px"
+                backgroundColor="white"
+                border="0px"
+                onClick={() => console.log('TODO')}
+              >
+                Sign out
+              </Button>
+            </Box>
+            <Text color="grey" fontSize={0}>
               {did}
             </Text>
           </Box>
@@ -208,7 +215,6 @@ function BookmarkForm(props: {
       alignItems="center"
       justifyContent="space-between"
       flex={1}
-      marginTop={3}
     >
       <Box
         flex={1}
@@ -218,31 +224,64 @@ function BookmarkForm(props: {
         alignItems="center"
         justifyContent="space-evenly"
       >
-        <Box display="flex" flexDirection="row" width="100%">
-          <Text marginRight={2} textAlign="right" width="20%" color="grey">
+        <Box
+          display="flex"
+          flexDirection="column"
+          width="100%"
+          alignItems="center"
+        >
+          <Text
+            width="100%"
+            fontSize={0}
+            marginBottom={0}
+            textAlign="left"
+            color="grey"
+          >
             Title
           </Text>
           <Input
-            width="80%"
+            width="100%"
             value={bookmarkForm.title}
             onChange={(e) => handleChange('title', e)}
           />
         </Box>
-        <Box display="flex" flexDirection="row" width="100%">
-          <Text marginRight={2} textAlign="right" width="20%" color="grey">
+        <Box
+          display="flex"
+          flexDirection="column"
+          width="100%"
+          alignItems="center"
+        >
+          <Text
+            width="100%"
+            fontSize={0}
+            marginBottom={0}
+            textAlign="left"
+            color="grey"
+          >
             Description
           </Text>
           <Input
-            width="80%"
+            width="100%"
             value={bookmarkForm.description}
             onChange={(e) => handleChange('description', e)}
           />
         </Box>
-        <Box display="flex" flexDirection="row" width="100%">
-          <Text marginRight={2} textAlign="right" width="20%" color="grey">
+        <Box
+          display="flex"
+          flexDirection="column"
+          width="100%"
+          alignItems="center"
+        >
+          <Text
+            width="100%"
+            fontSize={0}
+            marginBottom={0}
+            textAlign="left"
+            color="grey"
+          >
             URL
           </Text>
-          <Input width="80%" value={bookmarkForm.url} disabled />
+          <Input width="100%" value={bookmarkForm.url} disabled />
         </Box>
       </Box>
       <Button onClick={handleClickSave} disabled={isLoading || isSaving}>
